@@ -1,20 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
-import './index.css';
-import App from './App';
+import { fromEvent } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { map, filter, debounceTime, switchMap } from 'rxjs/operators';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
-);
+const inputEl = document.createElement('input');
+inputEl.placeholder = 'Type something to search...';
+document.body.appendChild(inputEl);
+const divWrapper = document.createElement('div');
+document.body.appendChild(divWrapper);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+// Rxjs поток
+const inputElChange$ = fromEvent(inputEl, 'input');
+inputElChange$.pipe(
+  map((o) => o.target.value),
+  filter((o) => o.trim !== ''),
+  debounceTime(100),
+  map((o) => new URLSearchParams({q: o})),  
+  switchMap((o) => ajax.getJSON(`http://localhost:7070/api/search?${o}`))
+).subscribe({
+  next: (value) => {
+    if (!inputEl.value.trim().length) {
+      value = [];
+    }
+    fnList(value);
+  },
+  error: (error) => console.log('error', error),
+  complete: () => console.log('complete')
+})
+//===
+
+// Прорисовка результата запроса
+function fnList(arr) {
+  divWrapper.innerHTML='';
+  arr.forEach((item) => {
+    divWrapper.insertAdjacentHTML('beforeend', `<p>${item.name}</p>`);
+  })
+}
