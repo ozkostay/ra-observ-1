@@ -1,12 +1,13 @@
 import './App.css';
-import PhotoForm from './components/PhotoForm';
-import PhotoList from './components/PhotoList';
+import SkillsForm from './components/SkillsForm';
+import SkillsList from './components/SkillsList';
+// import PhotoList from './components/PhotoList';
 
 function App() {
   return (
     <div className="App">
-      <PhotoForm />
-      <PhotoList />
+      <SkillsForm />
+      <SkillsList />
     </div>
   );
 }
