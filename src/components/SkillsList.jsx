@@ -1,7 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import SkillsItem from "./SkilsItem";
 
+
 export default function SkillsList() {
+  // const {  } = useSelector(state => state.skill);
+  const skillsArr = useSelector((state) => state.skillsReducer.skillsArr);
+
+  console.log('=================== skillsArr', skillsArr)
+
   let nextId = 1;
   const tempArr = [
     { id: nextId++, name: "React" },
@@ -11,9 +18,17 @@ export default function SkillsList() {
     { id: nextId++, name: "Redux Observable" },
     { id: nextId++, name: "Redux Saga" },
   ];
+  const container = {
+    width: 300,
+    margin: '0 auto',
+    padding: '10px',
+    border: '1px solid red',
+    textAlign: 'left'
+  }
 
-  return <>
-    <br></br>
-    {tempArr.map((item) => <SkillsItem item={item}/>)}
-  </>
+  console.log(tempArr);
+
+  return <div style={container}>
+    {tempArr.map((item) => <SkillsItem key={item.id} item={item}/>)}
+  </div>
 }

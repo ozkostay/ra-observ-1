@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { addPhoto } from '../store/photosSlice';
+import { fromEvent } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { map, filter, debounceTime, switchMap } from 'rxjs/operators';
 import { updateSkills } from '../store/skillsSlice';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function StarForm() {
   const dispatch = useDispatch();
-  const [skillStartLetter, setSkillStartLetter] = useState();
+  const [skillStartLetter, setSkillStartLetter] = useState('');
   
   // function fnSubmit(e) {
   //   e.preventDefault();
@@ -20,6 +22,7 @@ export default function StarForm() {
 
   function inputOnChange(e) {
     e.preventDefault();
+    console.log('=== skillStartLetter ', e.target.value);
     //etcurrentFile(URL.createObjectURL(e.target.files[0]));
     setSkillStartLetter(e.target.value);
     // console.log('=== skillStartLetter ', skillStartLetter);
@@ -30,7 +33,12 @@ export default function StarForm() {
       <p>Выборка</p>
         <br></br>
         <br></br>
-        <input type="text" placeholder = 'Type something to search...' value={skillStartLetter} onChange={inputOnChange}></input>
+        <input 
+          type="text" 
+          placeholder = 'Type something to search...' 
+          value={skillStartLetter} 
+          onChange={(e) => inputOnChange(e)}>
+        </input>
     </form>
   </>
 }
