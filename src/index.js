@@ -10,6 +10,7 @@ document.body.appendChild(divWrapper);
 
 // Rxjs поток
 const inputElChange$ = fromEvent(inputEl, 'input');
+
 inputElChange$.pipe(
   map((o) => o.target.value),
   filter((o) => o.trim !== ''),
@@ -18,6 +19,7 @@ inputElChange$.pipe(
   switchMap((o) => ajax.getJSON(`http://localhost:7070/api/search?${o}`))
 ).subscribe({
   next: (value) => {
+    console.log('EVent');
     if (!inputEl.value.trim().length) {
       value = [];
     }

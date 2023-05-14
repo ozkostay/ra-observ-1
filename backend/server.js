@@ -29,9 +29,9 @@ const skills = [
 
 let isEven = true;
 app.get("/api/search", async (req, res) => {
-  // if (Math.random() > 0.75) {
-  //   return res.status(500).end();
-  // }
+  if (Math.random() > 0.75) {
+    return res.status(500).end();
+  }
   const { q } = req.query;
   return new Promise((resolve, reject) => {
     setTimeout(
@@ -42,8 +42,8 @@ app.get("/api/search", async (req, res) => {
         res.send(JSON.stringify(data));
         resolve();
       },
-      // isEven ? 1000 : 5 * 1000
-      isEven ? 100 : 1000
+      isEven ? 1000 : 5 * 1000
+      // isEven ? 100 : 1000
     );
     isEven = !isEven;
   });
