@@ -1,6 +1,6 @@
 import { fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import { map, filter, debounceTime, switchMap } from 'rxjs/operators';
+import { map, filter, debounceTime, switchMap, retry } from 'rxjs/operators';
 
 const inputEl = document.createElement('input');
 inputEl.placeholder = 'Type something to search...';
@@ -12,6 +12,7 @@ document.body.appendChild(divWrapper);
 const inputElChange$ = fromEvent(inputEl, 'input');
 
 inputElChange$.pipe(
+  retry(3),
   map((o) => o.target.value),
   filter((o) => o.trim !== ''),
   debounceTime(100),
